@@ -1,27 +1,54 @@
-# SmartphoneShop
+# SmartphoneShop — Hawala Smart Boutique
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
+Projet d'apprentissage full stack : catalogue de smartphones et gestion des produits et stocks.
 
-## Development server
+## Technologies
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Angular 17, TypeScript, RxJS, formulaires réactifs, Bootstrap 5 ; Node.js, Express 5, API REST et MongoDB/Mongoose.
 
-## Code scaffolding
+## Fonctionnalités
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Liste et fiche détaillée des smartphones.
+- Ajout, modification et suppression via l'API REST.
+- Recherche par nom et filtres par marque, prix et disponibilité.
 
-## Build
+## Démarrage local
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Prérequis : Node.js et npm compatibles avec Angular 17, MongoDB local démarré sur le port 27017. La base utilisée est `smartphoneShop`.
 
-## Running unit tests
+À la racine :
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```sh
+npm ci
+cd backend
+npm ci
+npm start
+```
 
-## Running end-to-end tests
+Dans un deuxième terminal, à la racine :
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```sh
+npm start -- --host 127.0.0.1 --port 4200
+```
 
-## Further help
+Ouvrir http://127.0.0.1:4200. L'API utilise http://localhost:3000/api/smartphones.
+Une base vide affiche un catalogue vide ; les produits peuvent être ajoutés depuis l'interface. Aucune donnée MongoDB locale n'est incluse dans le dépôt.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Vérification
+
+```sh
+npm run build
+npm test -- --watch=false --browsers=ChromeHeadless
+```
+
+La compilation de production et le démarrage local ont été vérifiés le 19 octobre 2026. Les tests existants sont à remettre en état : le test du composant de détail importe encore `DetailComponent` au lieu de `SmartphoneDetailComponent`, et les tests générés doivent être adaptés à l'application.
+
+## Limites et améliorations prévues
+
+Prototype à utiliser en local : les opérations de gestion ne sont pas encore protégées par une authentification ou des rôles. La validation des champs et la gestion des erreurs restent à renforcer.
+
+Les boutons panier, compte, newsletter et certains liens sont des éléments de maquette. Le panier, les commandes et le paiement ne sont pas implémentés. Les adresses de l'API et de MongoDB sont actuellement locales et doivent être configurées avant un déploiement.
+
+## Auteur
+
+[Yassine Ben Hawala](https://github.com/hawalayessin)

@@ -1,0 +1,142 @@
+<div class="container mt-5">
+  <!-- Affichage pendant le chargement -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+    <p class="mt-2">Chargement des détails du smartphone...</p>
+  </div>
+
+  <!-- Message d'erreur -->
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    {{ error }}
+    <button routerLink="/smartphones" class="btn btn-outline-danger ms-3">
+      Retour aux smartphones
+    </button>
+  </div>
+
+  <!-- Détails du smartphone -->
+  <div *ngIf="!loading && !error && smartphone" class="row">
+    <!-- Bouton retour -->
+    <div class="col-12 mb-4">
+      <button (click)="goBack()" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-left me-2"></i>Retour
+      </button>
+    </div>
+
+    <!-- Image du smartphone -->
+    <div class="col-md-5 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body p-4 text-center">
+          <img
+            [src]="smartphone.imageUrl"
+            [alt]="smartphone.nomTel"
+            class="img-fluid"
+            style="max-height: 400px; object-fit: contain"
+            onerror="this.src='https://via.placeholder.com/400'; this.onerror='';"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Informations du smartphone -->
+    <div class="col-md-7">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <span class="badge bg-primary me-2">{{ smartphone.marque }}</span>
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-success': smartphone.stock > 10,
+              'bg-warning text-dark':
+                smartphone.stock > 0 && smartphone.stock <= 10,
+              'bg-danger': smartphone.stock === 0
+            }"
+          >
+            {{
+              smartphone.stock > 10
+                ? "En stock"
+                : smartphone.stock > 0
+                ? "Stock faible"
+                : "Rupture de stock"
+            }}
+          </span>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title mb-4">{{ smartphone.nomTel }}</h2>
+
+          <h5 class="text-primary mt-4 mb-3">Caractéristiques</h5>
+          <p class="card-text">{{ smartphone.caracteristiques }}</p>
+
+          <div class="card-text mt-4">
+            <div class="row">
+              <div class="col-6">
+                <p><strong>Marque:</strong> {{ smartphone.marque }}</p>
+              </div>
+              <div class="col-6">
+                <p><strong>Stock:</strong> {{ smartphone.stock }} unités</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <h3 class="text-primary fw-bold mb-0">
+              {{ smartphone.prix | currency : "EUR" }}
+            </h3>
+            <button
+              class="btn btn-primary btn-lg"
+              [disabled]="smartphone.stock === 0"
+            >
+              <i class="fas fa-shopping-cart me-2"></i>Ajouter au panier
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Caractéristiques détaillées -->
+      <div class="card shadow-sm mt-4">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Caractéristiques détaillées</h5>
+          <table class="table">
+            <tbody>
+              <tr>
+                <th scope="row" style="width: 150px">Référence</th>
+                <td>{{ smartphone.id }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Marque</th>
+                <td>{{ smartphone.marque }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Modèle</th>
+                <td>{{ smartphone.nomTel }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Disponibilité</th>
+                <td>
+                  <span
+                    class="badge"
+                    [ngClass]="{
+                      'bg-success': smartphone.stock > 10,
+                      'bg-warning text-dark':
+                        smartphone.stock > 0 && smartphone.stock <= 10,
+                      'bg-danger': smartphone.stock === 0
+                    }"
+                  >
+                    {{
+                      smartphone.stock > 10
+                        ? "En stock"
+                        : smartphone.stock > 0
+                        ? "Stock faible"
+                        : "Rupture de stock"
+                    }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

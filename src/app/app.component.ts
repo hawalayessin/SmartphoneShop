@@ -1,13 +1,18 @@
+// In app.component.ts
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { SmartphoneDashboardComponent } from './smartphone-dashboard/smartphone-dashboard.component';
+import { SmartphoneDetailComponent } from './smartphone/detail/detail.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, SmartphoneDashboardComponent,SmartphoneDetailComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   title = 'SmartphoneShop';
 }
+
+// In app.component.html

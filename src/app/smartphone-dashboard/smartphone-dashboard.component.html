@@ -1,0 +1,466 @@
+<div class="container-fluid">
+  <!-- Navbar -->
+  <nav
+    class="navbar navbar-expand-lg navbar-dark"
+    style="background-color: #3949ab"
+  >
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">
+        <i class="fas fa-mobile-alt me-2"></i>hawala smart Boutique
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Accueil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Smartphones</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Accessoires</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Promotions</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center">
+          <div class="input-group me-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Rechercher..."
+              [(ngModel)]="searchTerm"
+              (input)="applyFilters()"
+              [ngModelOptions]="{ standalone: true }"
+            />
+            <button class="btn btn-light" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          <button class="btn btn-outline-light me-2">
+            <i class="fas fa-user"></i>
+          </button>
+          <button class="btn btn-warning position-relative">
+            <i class="fas fa-shopping-cart"></i>
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            >
+              3
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div
+    class="py-5"
+    style="background: linear-gradient(135deg, #3949ab, #5c6bc0); color: white"
+  >
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1 class="fw-bold mb-3">Découvrez notre sélection de smartphones</h1>
+          <p class="lead mb-4">
+            Les derniers modèles des meilleures marques à prix compétitifs
+          </p>
+          <button class="btn btn-warning btn-lg">Voir les nouveautés</button>
+        </div>
+        <div class="col-lg-6 text-center">
+          <img
+            src="assets/images/smartphones-hero.jpg"
+            alt="Smartphones"
+            class="img-fluid"
+            onerror="this.src='https://via.placeholder.com/500x300'; this.onerror='';"
+            width="500px"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-4">
+    <!-- Filter Section -->
+    <div class="p-3 mb-4 bg-white rounded shadow-sm">
+      <div class="row align-items-center">
+        <div class="col-md-3 mb-3 mb-md-0">
+          <label class="form-label">Marque</label>
+          <select
+            class="form-select"
+            [(ngModel)]="selectedBrand"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option value="">Toutes les marques</option>
+            <option value="Apple">Apple</option>
+            <option value="Samsung">Samsung</option>
+            <option value="Xiaomi">Xiaomi</option>
+            <option value="Google">Google</option>
+            <option value="Huawei">Huawei</option>
+          </select>
+        </div>
+        <div class="col-md-3 mb-3 mb-md-0">
+          <label class="form-label">Prix</label>
+          <select class="form-select" (change)="setPriceRange($event)">
+            <option value="">Tous les prix</option>
+            <option value="0-300">0€ - 300€</option>
+            <option value="300-600">300€ - 600€</option>
+            <option value="600-900">600€ - 900€</option>
+            <option value="900+">900€ et plus</option>
+          </select>
+        </div>
+        <div class="col-md-3 mb-3 mb-md-0">
+          <label class="form-label">Disponibilité</label>
+          <select
+            class="form-select"
+            [(ngModel)]="availableOnly"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option [ngValue]="false">Tous</option>
+            <option [ngValue]="true">En stock</option>
+          </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <button class="btn btn-primary w-100" (click)="applyFilters()">
+            Filtrer
+          </button>
+          <button class="btn btn-secondary ms-2" (click)="resetFilters()">
+            Réinitialiser
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Controls -->
+    <div class="d-flex justify-content-end mb-4">
+      <button
+        type="button"
+        class="btn btn-success"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+        (click)="clickAddSmartphone()"
+      >
+        <i class="fas fa-plus me-2"></i>Ajouter un smartphone
+      </button>
+    </div>
+
+    <!-- Cards Section -->
+    <div class="row">
+      <div
+        *ngFor="let smartphone of filteredSmartphones"
+        class="col-lg-3 col-md-4 col-sm-6 mb-4"
+      >
+        <div class="card h-100 shadow-sm rounded">
+          <!-- Stock Badge -->
+          <span
+            class="position-absolute top-0 end-0 m-2 badge"
+            [ngClass]="{
+              'bg-success': smartphone.stock > 10,
+              'bg-warning text-dark':
+                smartphone.stock > 0 && smartphone.stock <= 10,
+              'bg-danger': smartphone.stock === 0
+            }"
+          >
+            {{
+              smartphone.stock > 10
+                ? "En stock"
+                : smartphone.stock > 0
+                ? "Stock faible"
+                : "Rupture de stock"
+            }}
+          </span>
+
+          <!-- Image -->
+          <img
+            [src]="smartphone.imageUrl || 'https://via.placeholder.com/400'"
+            alt="{{ smartphone.nomTel }}"
+            class="card-img-top p-3"
+            style="height: 200px; object-fit: contain"
+          />
+
+          <div class="card-body d-flex flex-column">
+            <p class="text-primary fw-bold text-uppercase small mb-1">
+              {{ smartphone.marque }}
+            </p>
+            <h5 class="card-title">{{ smartphone.nomTel }}</h5>
+            <p class="card-text small text-muted mb-3">
+              {{ smartphone.caracteristiques }}
+            </p>
+            <div class="d-flex justify-content-between align-items-end mt-auto">
+              <span class="fw-bold fs-5">{{
+                smartphone.prix | currency : "EUR"
+              }}</span>
+              <div class="d-flex flex-column align-items-end gap-2">
+                <!-- Bouton Détails -->
+                <button
+                  class="btn btn-sm btn-outline-secondary w-100"
+                  [routerLink]="['/smartphones', smartphone._id]"
+                >
+                  <i class="fas fa-info-circle me-1"></i>Détails
+                </button>
+                <!-- Bouton Modifier -->
+                <button
+                  class="btn btn-sm btn-outline-primary w-100"
+                  data-bs-toggle="modal"
+                  data-bs-target="#staticBackdrop"
+                  (click)="onEdit(smartphone)"
+                >
+                  <i class="fas fa-edit me-1"></i>Modifier
+                </button>
+                <!-- Bouton Ajouter au panier -->
+                <button
+                  class="btn btn-sm btn-primary w-100"
+                  [disabled]="smartphone.stock === 0"
+                >
+                  <i class="fas fa-shopping-cart me-1"></i>Ajouter
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No smartphones message -->
+    <div *ngIf="filteredSmartphones.length === 0" class="text-center py-5">
+      <p class="lead">Aucun smartphone disponible pour le moment.</p>
+    </div>
+
+    <!-- Modal for Add/Edit Smartphone -->
+    <div
+      class="modal fade"
+      id="staticBackdrop"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div
+            class="modal-header"
+            [ngStyle]="{
+              'background-color': showAdd ? '#3949ab' : '#ff9800',
+              color: 'white'
+            }"
+          >
+            <h5 class="modal-title" id="staticBackdropLabel">
+              {{ showAdd ? "Ajouter un smartphone" : "Modifier un smartphone" }}
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              id="closeModal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="formValue">
+              <div class="mb-3">
+                <label for="nomTel" class="form-label">Nom du Téléphone</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="nomTel"
+                  id="nomTel"
+                  placeholder="iPhone 15 Pro"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="marque" class="form-label">Marque</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="marque"
+                  id="marque"
+                  placeholder="Apple"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="caracteristiques" class="form-label"
+                  >Caractéristiques</label
+                >
+                <textarea
+                  class="form-control"
+                  formControlName="caracteristiques"
+                  id="caracteristiques"
+                  rows="3"
+                  placeholder="6.1 pouces, 8GB RAM, 256GB, A17 Pro, iOS 17"
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="prix" class="form-label">Prix</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="prix"
+                  id="prix"
+                  placeholder="en euros"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="stock" class="form-label">Stock</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="stock"
+                  id="stock"
+                  placeholder="10"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="imageUrl" class="form-label">URL de l'image</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="imageUrl"
+                  id="imageUrl"
+                  placeholder="https://exemple.com/image.jpg"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              *ngIf="showUpdate"
+              type="button"
+              class="btn btn-danger me-auto"
+              (click)="deleteSmartphone(smartphoneModelObj.id)"
+            >
+              Supprimer
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Annuler
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              *ngIf="showAdd"
+              (click)="addSmartphone()"
+            >
+              Ajouter
+            </button>
+            <button
+              type="button"
+              class="btn btn-warning"
+              *ngIf="showUpdate"
+              (click)="updateSmartphone()"
+            >
+              Mettre à jour
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white mt-5 py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5 class="mb-3">Hawala phone Boutique</h5>
+          <p>
+            Votre destination pour les derniers smartphones et accessoires de
+            qualité.
+          </p>
+          <div class="mt-3">
+            <a href="#" class="text-white me-3"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+            <a href="#" class="text-white me-3"
+              ><i class="fab fa-twitter"></i
+            ></a>
+            <a href="#" class="text-white me-3"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="col-md-2 mb-4 mb-md-0">
+          <h6 class="mb-3">Navigation</h6>
+          <ul class="list-unstyled">
+            <li class="mb-2">
+              <a href="#" class="text-white text-decoration-none">Accueil</a>
+            </li>
+            <li class="mb-2">
+              <a href="#" class="text-white text-decoration-none"
+                >Smartphones</a
+              >
+            </li>
+            <li class="mb-2">
+              <a href="#" class="text-white text-decoration-none"
+                >Accessoires</a
+              >
+            </li>
+            <li class="mb-2">
+              <a href="#" class="text-white text-decoration-none">Promotions</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3 mb-4 mb-md-0">
+          <h6 class="mb-3">Service Client</h6>
+          <ul class="list-unstyled">
+            <li class="mb-2">
+              <a href="#" class="text-white text-decoration-none">Contact</a>
+            </li>
+            <li class="mb-2">
+              <a href="#" class="text-white text-decoration-none">FAQ</a>
+            </li>
+            <li class="mb-2">
+              <a href="#" class="text-white text-decoration-none">Livraison</a>
+            </li>
+            <li class="mb-2">
+              <a href="#" class="text-white text-decoration-none">Retours</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h6 class="mb-3">Newsletter</h6>
+          <p class="small">Inscrivez-vous pour recevoir nos offres spéciales</p>
+          <div class="input-group mb-3">
+            <input
+              type="email"
+              class="form-control"
+              placeholder="Votre email"
+            />
+            <button class="btn btn-warning" type="button">S'inscrire</button>
+          </div>
+        </div>
+      </div>
+      <hr class="my-4" />
+      <div class="row">
+        <div class="col-md-6 small">
+          <p class="mb-0">© 2025 Smartphone Boutique. Tous droits réservés.</p>
+        </div>
+        <div class="col-md-6 text-md-end small">
+          <a href="#" class="text-white text-decoration-none me-3"
+            >Mentions légales</a
+          >
+          <a href="#" class="text-white text-decoration-none me-3">CGV</a>
+          <a href="#" class="text-white text-decoration-none"
+            >Politique de confidentialité</a
+          >
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
