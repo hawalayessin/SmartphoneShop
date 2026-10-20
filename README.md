@@ -7,10 +7,11 @@
 `npm ci` puis `npm run start:demo` ouvre http://127.0.0.1:5183.
 `npm run build:demo` produit `dist/smartphone-shop/browser`.
 
-Le mode demo utilise quatre produits d'exemple et `sessionStorage` : chaque onglet
+La demo conserve les templates et le style originaux du projet. Elle utilise les
+produits fictifs du fichier `src/assets/data/smartphones.json` et `sessionStorage` : chaque onglet
 conserve ses modifications, sans base partagee, compte, paiement ou commande.
 Les prix sont illustratifs ; les visuels des exemples sont les logos fabricants.
-Le bouton de reinitialisation restaure les exemples. Ne pas saisir de donnees sensibles.
+Fermer l'onglet termine la session d'exemple. Ne pas saisir de donnees sensibles.
 
 Le mode standard (`npm start`) conserve l'API Express/MongoDB existante a
 `http://localhost:3000/api/smartphones`. La demo publique ne lance pas ce backend.
@@ -73,10 +74,10 @@ Le backend local reste un prototype : les operations de gestion ne sont pas
 protegees par une authentification ou des roles. Ne pas l'exposer publiquement
 sans renforcer sa securite. La demo Vercel ne contacte pas ce backend.
 
-Le catalogue n'implemente ni panier, ni commandes, ni paiement. Les anciennes
-commandes de maquette ont ete retirees. Les formulaires valident les champs
-obligatoires, le prix positif et le stock entier ; le stockage demo valide aussi
-les protocoles des images et limite le catalogue a 100 produits par onglet.
+Le catalogue n'implemente ni panier, ni commandes, ni paiement. Les boutons panier,
+compte et newsletter du template original restent des elements de maquette.
+Le stockage des donnees fictives valide les champs obligatoires, le prix positif,
+le stock entier et les protocoles des images ; limite de 100 produits par onglet.
 
 ## Auteur
 

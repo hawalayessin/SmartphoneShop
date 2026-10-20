@@ -1,11 +1,7 @@
 import type { Smartphone } from './api.service';
+import sampleData from '../../assets/data/smartphones.json';
 
-const samples: Smartphone[] = [
-  { _id: 'demo-apple', nomTel: 'iPhone 13 Pro', marque: 'Apple', caracteristiques: 'Ecran 6,1 pouces OLED, 128 Go, puce A15 Bionic.', prix: 649, stock: 12, imageUrl: '/assets/images/apple.jpg' },
-  { _id: 'demo-samsung', nomTel: 'Galaxy S23', marque: 'Samsung', caracteristiques: 'Ecran 6,1 pouces AMOLED, 256 Go, 8 Go RAM.', prix: 599, stock: 7, imageUrl: '/assets/images/samsung.jpg' },
-  { _id: 'demo-huawei', nomTel: 'P30 Pro', marque: 'Huawei', caracteristiques: 'Ecran 6,47 pouces OLED, 128 Go, 8 Go RAM.', prix: 279, stock: 0, imageUrl: '/assets/images/Huawei.jpg' },
-  { _id: 'demo-samsung-a', nomTel: 'Galaxy A54', marque: 'Samsung', caracteristiques: 'Ecran 6,4 pouces AMOLED, 128 Go, 5G.', prix: 349, stock: 18, imageUrl: '/assets/images/samsung.jpg' },
-];
+const samples: Smartphone[] = sampleData;
 
 export class DemoCatalog {
   private rows = structuredClone(samples);
