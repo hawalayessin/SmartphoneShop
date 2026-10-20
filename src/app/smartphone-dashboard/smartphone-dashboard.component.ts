@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ApiService } from '../shared/api.service';
 import { SmartphoneModel } from './smartphone.model';
@@ -29,16 +29,19 @@ export class SmartphoneDashboardComponent implements OnInit {
   minPrice: number | null = null;
   maxPrice: number | null = null;
   availableOnly: boolean = false;
+  readonly isDemo = this.api.isDemo;
+  get brands() { return [...new Set(this.smartphoneData.map(row => row.marque))].sort(); }
+  resetDemo() { this.api.resetDemo(); this.resetFilters(); this.getAllSmartphones(); }
 
   constructor(private formBuilder: FormBuilder, private api: ApiService) {}
 
   ngOnInit(): void {
     this.formValue = this.formBuilder.group({
-      nomTel: [''],
-      marque: [''],
+      nomTel: ['', [Validators.required, Validators.maxLength(100)]],
+      marque: ['', [Validators.required, Validators.maxLength(100)]],
       caracteristiques: [''],
-      prix: [''],
-      stock: [''],
+      prix: ['', [Validators.required, Validators.min(0.01)]],
+      stock: [0, [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)]],
       imageUrl: [''],
     });
     this.getAllSmartphones();
@@ -54,12 +57,13 @@ export class SmartphoneDashboardComponent implements OnInit {
   getAllSmartphones() {
     this.api.getAllSmartphones().subscribe((res) => {
       this.smartphoneData = res;
-      this.filteredSmartphones = res;
+      this.applyFilters();
     });
   }
 
   // Add a new smartphone
   addSmartphone() {
+    if (this.formValue.invalid) return;
     const newSmartphone = {
       nomTel: this.formValue.value.nomTel || '',
       marque: this.formValue.value.marque || '',
@@ -76,7 +80,7 @@ export class SmartphoneDashboardComponent implements OnInit {
         this.getAllSmartphones();
         document.getElementById('closeModal')?.click();
       },
-      () => alert("Une erreur s'est produite")
+      (error) => alert(error.message || "Une erreur s'est produite")
     );
   }
 
@@ -99,6 +103,7 @@ export class SmartphoneDashboardComponent implements OnInit {
 
   // Update smartphone
   updateSmartphone() {
+    if (this.formValue.invalid) return;
     const updatedSmartphone = {
       nomTel: this.formValue.value.nomTel || '',
       marque: this.formValue.value.marque || '',
@@ -110,12 +115,12 @@ export class SmartphoneDashboardComponent implements OnInit {
 
     this.api
       .updateSmartphone(updatedSmartphone, this.smartphoneModelObj.id)
-      .subscribe(() => {
+      .subscribe({ next: () => {
         alert('Smartphone mis à jour avec succès');
         this.formValue.reset();
         this.getAllSmartphones();
         document.getElementById('closeModal')?.click();
-      });
+      }, error: error => alert(error.message || 'Modification impossible.') });
   }
 
   // Définir la plage de prix à partir du sélecteur

@@ -23,6 +23,9 @@
             "scripts": []
           },
           "configurations": {
+            "demo": {
+              "fileReplacements": [{ "replace": "src/environments/environment.ts", "with": "src/environments/environment.demo.ts" }]
+            },
             "production": {
               "budgets": [
                 {
@@ -49,6 +52,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
+            "demo": { "buildTarget": "SmartphoneShop:build:development,demo" },
             "production": {
               "buildTarget": "SmartphoneShop:build:production"
             },

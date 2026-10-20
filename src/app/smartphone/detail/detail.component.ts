@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiService } from '../../shared/api.service';
 import { CommonModule, Location } from '@angular/common';
 
@@ -8,7 +8,7 @@ import { CommonModule, Location } from '@angular/common';
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
 })
 export class SmartphoneDetailComponent implements OnInit {
   smartphone: any;

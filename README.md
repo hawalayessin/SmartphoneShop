@@ -1,4 +1,25 @@
-# SmartphoneShop — Hawala Smart Boutique
+# SmartShop - Catalogue Angular
+
+[Demo publique](https://smartshop-angular-demo.vercel.app) | [Portfolio](https://portfoliohawala.vercel.app/project)
+
+## Demo Vercel
+
+`npm ci` puis `npm run start:demo` ouvre http://127.0.0.1:5183.
+`npm run build:demo` produit `dist/smartphone-shop/browser`.
+
+Le mode demo utilise quatre produits d'exemple et `sessionStorage` : chaque onglet
+conserve ses modifications, sans base partagee, compte, paiement ou commande.
+Les prix sont illustratifs ; les visuels des exemples sont les logos fabricants.
+Le bouton de reinitialisation restaure les exemples. Ne pas saisir de donnees sensibles.
+
+Le mode standard (`npm start`) conserve l'API Express/MongoDB existante a
+`http://localhost:3000/api/smartphones`. La demo publique ne lance pas ce backend.
+Configuration dans `src/environments/` ; Vercel utilise la configuration `demo`.
+
+Tests du stockage de demonstration :
+`npm test -- --watch=false --browsers=ChromeHeadless --include=src/app/shared/demo-catalog.spec.ts`.
+
+---
 
 Projet d'apprentissage full stack : catalogue de smartphones et gestion des produits et stocks.
 
