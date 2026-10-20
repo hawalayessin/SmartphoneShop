@@ -62,13 +62,21 @@ npm run build
 npm test -- --watch=false --browsers=ChromeHeadless
 ```
 
-La compilation de production et le démarrage local ont été vérifiés le 19 octobre 2026. Les tests existants sont à remettre en état : le test du composant de détail importe encore `DetailComponent` au lieu de `SmartphoneDetailComponent`, et les tests générés doivent être adaptés à l'application.
+La compilation de la demo, ses quatre tests de stockage et les parcours navigateur
+(CRUD, filtres, fiches, rechargement et mobile) ont ete verifies le 20 octobre 2026.
+Les autres tests generes doivent encore etre adaptes a l'application ; la commande
+ciblee dans la section Demo Vercel permet de verifier le nouveau stockage separement.
 
 ## Limites et améliorations prévues
 
-Prototype à utiliser en local : les opérations de gestion ne sont pas encore protégées par une authentification ou des rôles. La validation des champs et la gestion des erreurs restent à renforcer.
+Le backend local reste un prototype : les operations de gestion ne sont pas
+protegees par une authentification ou des roles. Ne pas l'exposer publiquement
+sans renforcer sa securite. La demo Vercel ne contacte pas ce backend.
 
-Les boutons panier, compte, newsletter et certains liens sont des éléments de maquette. Le panier, les commandes et le paiement ne sont pas implémentés. Les adresses de l'API et de MongoDB sont actuellement locales et doivent être configurées avant un déploiement.
+Le catalogue n'implemente ni panier, ni commandes, ni paiement. Les anciennes
+commandes de maquette ont ete retirees. Les formulaires valident les champs
+obligatoires, le prix positif et le stock entier ; le stockage demo valide aussi
+les protocoles des images et limite le catalogue a 100 produits par onglet.
 
 ## Auteur
 
