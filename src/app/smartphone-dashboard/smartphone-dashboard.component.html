@@ -1,104 +1,15 @@
-<div class="container-fluid">
-  <!-- Navbar -->
-  <nav
-    class="navbar navbar-expand-lg navbar-dark"
-    style="background-color: #3949ab"
-  >
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="#">
-        <i class="fas fa-mobile-alt me-2"></i>hawala smart Boutique
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link active" href="#">Accueil</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Smartphones</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Accessoires</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Promotions</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li>
-        </ul>
-        <div class="d-flex align-items-center">
-          <div class="input-group me-3">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Rechercher..."
-              [(ngModel)]="searchTerm"
-              (input)="applyFilters()"
-              [ngModelOptions]="{ standalone: true }"
-            />
-            <button class="btn btn-light" type="button">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-          <button class="btn btn-outline-light me-2">
-            <i class="fas fa-user"></i>
-          </button>
-          <button class="btn btn-warning position-relative">
-            <i class="fas fa-shopping-cart"></i>
-            <span
-              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-            >
-              3
-            </span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <div
-    class="py-5"
-    style="background: linear-gradient(135deg, #3949ab, #5c6bc0); color: white"
-  >
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6">
-          <h1 class="fw-bold mb-3">Découvrez notre sélection de smartphones</h1>
-          <p class="lead mb-4">
-            Les derniers modèles des meilleures marques à prix compétitifs
-          </p>
-          <button class="btn btn-warning btn-lg">Voir les nouveautés</button>
-        </div>
-        <div class="col-lg-6 text-center">
-          <img
-            src="assets/images/smartphones-hero.jpg"
-            alt="Smartphones"
-            class="img-fluid"
-            onerror="this.src='https://via.placeholder.com/500x300'; this.onerror='';"
-            width="500px"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="container mt-4">
+<section *ngIf="home" class="shop-banner">
+  <div class="container"><div class="banner-copy"><p class="banner-eyebrow">HAWALA SMART BOUTIQUE</p><h1>SmartShop</h1><p class="banner-lead">Votre prochain smartphone,<br> votre prochaine histoire.</p><p class="banner-description">La sélection des grandes marques, réunie au même endroit.</p><a class="btn btn-primary banner-action" routerLink="/smartphones">Explorer les smartphones <i class="fas fa-arrow-right ms-2" aria-hidden="true"></i></a><a class="banner-secondary" routerLink="/promotions">Voir les offres <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i></a></div></div>
+</section>
+<div class="container catalogue-heading"><div><p class="catalogue-eyebrow">{{isPromotions ? 'SELECTION DU MOMENT' : 'LE CATALOGUE'}}</p><h1 *ngIf="!home">{{isPromotions ? 'Promotions' : 'Smartphones'}}</h1><h2 *ngIf="home">Notre selection de smartphones</h2><p class="text-secondary">{{isPromotions ? 'Offres fictives pour la demonstration.' : 'Trouvez le modele qui vous correspond.'}}</p></div><span class="catalogue-count">{{filteredSmartphones.length}} produit(s)</span></div>
+  <div class="container mt-4" id="catalogue">
     <!-- Filter Section -->
     <div class="p-3 mb-4 bg-white rounded shadow-sm">
       <div class="row align-items-center">
         <div class="col-md-3 mb-3 mb-md-0">
-          <label class="form-label">Marque</label>
+          <label class="form-label" for="brand-filter">Marque</label>
           <select
-            class="form-select"
+            class="form-select" id="brand-filter"
             [(ngModel)]="selectedBrand"
             [ngModelOptions]="{ standalone: true }"
           >
@@ -111,8 +22,8 @@
           </select>
         </div>
         <div class="col-md-3 mb-3 mb-md-0">
-          <label class="form-label">Prix</label>
-          <select class="form-select" (change)="setPriceRange($event)">
+          <label class="form-label" for="price-filter">Prix</label>
+          <select class="form-select" id="price-filter" [(ngModel)]="priceRange" (change)="setPriceRange($event)">
             <option value="">Tous les prix</option>
             <option value="0-300">0€ - 300€</option>
             <option value="300-600">300€ - 600€</option>
@@ -121,9 +32,9 @@
           </select>
         </div>
         <div class="col-md-3 mb-3 mb-md-0">
-          <label class="form-label">Disponibilité</label>
+          <label class="form-label" for="stock-filter">Disponibilité</label>
           <select
-            class="form-select"
+            class="form-select" id="stock-filter"
             [(ngModel)]="availableOnly"
             [ngModelOptions]="{ standalone: true }"
           >
@@ -183,7 +94,7 @@
 
           <!-- Image -->
           <img
-            [src]="smartphone.imageUrl || 'https://via.placeholder.com/400'"
+            [src]="smartphone.imageUrl || '/assets/images/smartphones-hero.jpg'"
             alt="{{ smartphone.nomTel }}"
             class="card-img-top p-3"
             style="height: 200px; object-fit: contain"
@@ -198,9 +109,9 @@
               {{ smartphone.caracteristiques }}
             </p>
             <div class="d-flex justify-content-between align-items-end mt-auto">
-              <span class="fw-bold fs-5">{{
+              <div><del *ngIf="smartphone.prixAvant > smartphone.prix" class="old-price">{{smartphone.prixAvant | currency : "EUR"}}</del><span class="fw-bold fs-5">{{
                 smartphone.prix | currency : "EUR"
-              }}</span>
+              }}</span></div>
               <div class="d-flex flex-column align-items-end gap-2">
                 <!-- Bouton Détails -->
                 <button
@@ -222,8 +133,9 @@
                 <button
                   class="btn btn-sm btn-primary w-100"
                   [disabled]="smartphone.stock === 0"
+                  (click)="cart.add(smartphone)"
                 >
-                  <i class="fas fa-shopping-cart me-1"></i>Ajouter
+                  <i class="fas fa-shopping-cart me-1" aria-hidden="true"></i>Ajouter
                 </button>
               </div>
             </div>
@@ -354,6 +266,7 @@
               type="button"
               class="btn btn-primary"
               *ngIf="showAdd"
+              [disabled]="formValue.invalid"
               (click)="addSmartphone()"
             >
               Ajouter
@@ -362,6 +275,7 @@
               type="button"
               class="btn btn-warning"
               *ngIf="showUpdate"
+              [disabled]="formValue.invalid"
               (click)="updateSmartphone()"
             >
               Mettre à jour
@@ -371,96 +285,3 @@
       </div>
     </div>
   </div>
-
-  <!-- Footer -->
-  <footer class="bg-dark text-white mt-5 py-4">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4 mb-4 mb-md-0">
-          <h5 class="mb-3">Hawala phone Boutique</h5>
-          <p>
-            Votre destination pour les derniers smartphones et accessoires de
-            qualité.
-          </p>
-          <div class="mt-3">
-            <a href="#" class="text-white me-3"
-              ><i class="fab fa-facebook-f"></i
-            ></a>
-            <a href="#" class="text-white me-3"
-              ><i class="fab fa-twitter"></i
-            ></a>
-            <a href="#" class="text-white me-3"
-              ><i class="fab fa-instagram"></i
-            ></a>
-            <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
-          </div>
-        </div>
-        <div class="col-md-2 mb-4 mb-md-0">
-          <h6 class="mb-3">Navigation</h6>
-          <ul class="list-unstyled">
-            <li class="mb-2">
-              <a href="#" class="text-white text-decoration-none">Accueil</a>
-            </li>
-            <li class="mb-2">
-              <a href="#" class="text-white text-decoration-none"
-                >Smartphones</a
-              >
-            </li>
-            <li class="mb-2">
-              <a href="#" class="text-white text-decoration-none"
-                >Accessoires</a
-              >
-            </li>
-            <li class="mb-2">
-              <a href="#" class="text-white text-decoration-none">Promotions</a>
-            </li>
-          </ul>
-        </div>
-        <div class="col-md-3 mb-4 mb-md-0">
-          <h6 class="mb-3">Service Client</h6>
-          <ul class="list-unstyled">
-            <li class="mb-2">
-              <a href="#" class="text-white text-decoration-none">Contact</a>
-            </li>
-            <li class="mb-2">
-              <a href="#" class="text-white text-decoration-none">FAQ</a>
-            </li>
-            <li class="mb-2">
-              <a href="#" class="text-white text-decoration-none">Livraison</a>
-            </li>
-            <li class="mb-2">
-              <a href="#" class="text-white text-decoration-none">Retours</a>
-            </li>
-          </ul>
-        </div>
-        <div class="col-md-3">
-          <h6 class="mb-3">Newsletter</h6>
-          <p class="small">Inscrivez-vous pour recevoir nos offres spéciales</p>
-          <div class="input-group mb-3">
-            <input
-              type="email"
-              class="form-control"
-              placeholder="Votre email"
-            />
-            <button class="btn btn-warning" type="button">S'inscrire</button>
-          </div>
-        </div>
-      </div>
-      <hr class="my-4" />
-      <div class="row">
-        <div class="col-md-6 small">
-          <p class="mb-0">© 2025 Smartphone Boutique. Tous droits réservés.</p>
-        </div>
-        <div class="col-md-6 text-md-end small">
-          <a href="#" class="text-white text-decoration-none me-3"
-            >Mentions légales</a
-          >
-          <a href="#" class="text-white text-decoration-none me-3">CGV</a>
-          <a href="#" class="text-white text-decoration-none"
-            >Politique de confidentialité</a
-          >
-        </div>
-      </div>
-    </div>
-  </footer>
-</div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiService } from '../../shared/api.service';
 import { CommonModule, Location } from '@angular/common';
+import { CartService } from '../../shared/cart.service';
 
 @Component({
   selector: 'app-smartphone-detail',
@@ -18,7 +19,8 @@ export class SmartphoneDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private ApiService: ApiService,
-    private location: Location
+    private location: Location,
+    public cart: CartService
   ) {}
 
   ngOnInit(): void {

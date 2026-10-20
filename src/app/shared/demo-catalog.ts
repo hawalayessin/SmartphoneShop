@@ -5,7 +5,7 @@ const samples: Smartphone[] = sampleData;
 
 export class DemoCatalog {
   private rows = structuredClone(samples);
-  private key = 'smartshop:catalog:v1';
+  private key = 'smartshop:catalog:v2';
   constructor(private storage?: Storage) {
     try {
       const saved = storage?.getItem(this.key);
@@ -20,7 +20,7 @@ export class DemoCatalog {
     if (!row || !row.nomTel?.trim() || !row.marque?.trim() || row.nomTel.length > 100 || row.marque.length > 100 || !Number.isFinite(row.prix) || row.prix < 0.01 || !Number.isInteger(row.stock) || row.stock < 0) throw new Error('Nom, marque, prix positif et stock entier requis.');
     const imageUrl = row.imageUrl || '/assets/images/smartphones-hero.jpg';
     if (!/^https:\/\//.test(imageUrl) && !/^\/assets\/images\/[\w.-]+$/.test(imageUrl)) throw new Error('Image : URL HTTPS ou fichier du catalogue requis.');
-    return { nomTel: row.nomTel.trim(), marque: row.marque.trim(), caracteristiques: String(row.caracteristiques || '').slice(0, 1000), prix: Math.round(row.prix * 100) / 100, stock: row.stock, imageUrl };
+    return { nomTel: row.nomTel.trim(), marque: row.marque.trim(), caracteristiques: String(row.caracteristiques || '').slice(0, 1000), prix: Math.round(row.prix * 100) / 100, stock: row.stock, imageUrl, ...(Number.isFinite(row.prixAvant) && row.prixAvant! > row.prix ? { prixAvant: row.prixAvant } : {}) };
   }
   private save() { try { this.storage?.setItem(this.key, JSON.stringify(this.rows)); } catch { /* Memory fallback when storage is unavailable. */ } }
   all() { return structuredClone(this.rows); }

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ApiService } from '../shared/api.service';
 import { SmartphoneModel } from './smartphone.model';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CartService } from '../shared/cart.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -29,16 +31,23 @@ export class SmartphoneDashboardComponent implements OnInit {
   minPrice: number | null = null;
   maxPrice: number | null = null;
   availableOnly: boolean = false;
+  priceRange = '';
+  home: boolean;
+  isPromotions: boolean;
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService) {}
+  constructor(private formBuilder: FormBuilder, private api: ApiService, route: ActivatedRoute, public cart: CartService) {
+    this.home = Boolean(route.snapshot.data['home']);
+    this.isPromotions = Boolean(route.snapshot.data['promotions']);
+    route.queryParamMap.pipe(takeUntilDestroyed()).subscribe(params => { this.searchTerm = params.get('q') || ''; this.applyFilters(); });
+  }
 
   ngOnInit(): void {
     this.formValue = this.formBuilder.group({
-      nomTel: [''],
-      marque: [''],
+      nomTel: ['', [Validators.required, Validators.maxLength(100)]],
+      marque: ['', [Validators.required, Validators.maxLength(100)]],
       caracteristiques: [''],
-      prix: [''],
-      stock: [''],
+      prix: ['', [Validators.required, Validators.min(0.01)]],
+      stock: [0, [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)]],
       imageUrl: [''],
     });
     this.getAllSmartphones();
@@ -54,12 +63,13 @@ export class SmartphoneDashboardComponent implements OnInit {
   getAllSmartphones() {
     this.api.getAllSmartphones().subscribe((res) => {
       this.smartphoneData = res;
-      this.filteredSmartphones = res;
+      this.applyFilters();
     });
   }
 
   // Add a new smartphone
   addSmartphone() {
+    if (this.formValue.invalid) return;
     const newSmartphone = {
       nomTel: this.formValue.value.nomTel || '',
       marque: this.formValue.value.marque || '',
@@ -76,7 +86,7 @@ export class SmartphoneDashboardComponent implements OnInit {
         this.getAllSmartphones();
         document.getElementById('closeModal')?.click();
       },
-      () => alert("Une erreur s'est produite")
+      (error) => alert(error.message || "Une erreur s'est produite")
     );
   }
 
@@ -99,6 +109,7 @@ export class SmartphoneDashboardComponent implements OnInit {
 
   // Update smartphone
   updateSmartphone() {
+    if (this.formValue.invalid) return;
     const updatedSmartphone = {
       nomTel: this.formValue.value.nomTel || '',
       marque: this.formValue.value.marque || '',
@@ -110,12 +121,12 @@ export class SmartphoneDashboardComponent implements OnInit {
 
     this.api
       .updateSmartphone(updatedSmartphone, this.smartphoneModelObj.id)
-      .subscribe(() => {
+      .subscribe({ next: () => {
         alert('Smartphone mis à jour avec succès');
         this.formValue.reset();
         this.getAllSmartphones();
         document.getElementById('closeModal')?.click();
-      });
+      }, error: error => alert(error.message || 'Modification impossible.') });
   }
 
   // Définir la plage de prix à partir du sélecteur
@@ -164,17 +175,19 @@ export class SmartphoneDashboardComponent implements OnInit {
       const matchesStock = this.availableOnly ?
         smartphone.stock > 0 : true;
 
-      return matchesSearch && matchesBrand && matchesPrice && matchesStock;
+      const matchesPromotion = !this.isPromotions || smartphone.prixAvant > smartphone.prix;
+      return matchesSearch && matchesBrand && matchesPrice && matchesStock && matchesPromotion;
     });
   }
 
   // Réinitialiser les filtres
   resetFilters() {
+    this.priceRange = '';
     this.searchTerm = '';
     this.selectedBrand = '';
     this.minPrice = null;
     this.maxPrice = null;
     this.availableOnly = false;
-    this.filteredSmartphones = [...this.smartphoneData];
+    this.applyFilters();
   }
 }

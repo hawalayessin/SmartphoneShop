@@ -19,7 +19,7 @@
   <div *ngIf="!loading && !error && smartphone" class="row">
     <!-- Bouton retour -->
     <div class="col-12 mb-4">
-      <button (click)="goBack()" class="btn btn-outline-primary">
+      <button routerLink="/smartphones" class="btn btn-outline-primary">
         <i class="fas fa-arrow-left me-2"></i>Retour
       </button>
     </div>
@@ -86,6 +86,7 @@
             <button
               class="btn btn-primary btn-lg"
               [disabled]="smartphone.stock === 0"
+              (click)="cart.add(smartphone)"
             >
               <i class="fas fa-shopping-cart me-2"></i>Ajouter au panier
             </button>
@@ -101,7 +102,7 @@
             <tbody>
               <tr>
                 <th scope="row" style="width: 150px">Référence</th>
-                <td>{{ smartphone.id }}</td>
+                <td>{{ smartphone._id }}</td>
               </tr>
               <tr>
                 <th scope="row">Marque</th>

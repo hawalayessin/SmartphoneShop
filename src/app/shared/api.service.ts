@@ -18,6 +18,7 @@ export interface Smartphone {
   prix: number;
   stock: number;
   imageUrl: string;
+  prixAvant?: number;
 }
 
 @Injectable({

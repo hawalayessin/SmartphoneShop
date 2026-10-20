@@ -1,0 +1,20 @@
+<div class="shop-topline"><div class="container">Hawala Smart Boutique <span>Projet Angular · Catalogue de demonstration</span></div></div>
+<header class="shop-header"><div class="container header-content">
+  <a routerLink="/" class="shop-brand" (click)="closeMenu()"><i class="fas fa-mobile-alt" aria-hidden="true"></i><span>SmartShop<small>Hawala Smart Boutique</small></span></a>
+  <button class="menu-toggle" type="button" (click)="menuOpen = !menuOpen" [attr.aria-expanded]="menuOpen" aria-controls="shop-navigation" [attr.aria-label]="menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'"><i class="fas" [class.fa-bars]="!menuOpen" [class.fa-times]="menuOpen" aria-hidden="true"></i></button>
+  <div id="shop-navigation" class="header-navigation" [class.is-open]="menuOpen">
+    <nav aria-label="Navigation principale"><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">Accueil</a><a routerLink="/smartphones" routerLinkActive="active" (click)="closeMenu()">Smartphones</a><a routerLink="/accessoires" routerLinkActive="active" (click)="closeMenu()">Accessoires</a><a routerLink="/promotions" routerLinkActive="active" (click)="closeMenu()">Promotions</a><a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">Contact</a></nav>
+    <form class="header-search" (ngSubmit)="searchCatalogue()"><input type="search" name="search" [(ngModel)]="search" placeholder="Rechercher..." aria-label="Rechercher un smartphone"><button type="submit" title="Rechercher" aria-label="Rechercher"><i class="fas fa-search" aria-hidden="true"></i></button></form>
+    <div class="header-actions"><a routerLink="/compte" (click)="closeMenu()" title="Profil de demonstration" aria-label="Mon profil"><i class="far fa-user" aria-hidden="true"></i></a><a routerLink="/panier" (click)="closeMenu()" title="Panier" aria-label="Mon panier"><i class="fas fa-shopping-bag" aria-hidden="true"></i><span>{{cart.count()}}</span></a></div>
+  </div>
+</div></header>
+<div *ngIf="cart.message()" class="cart-feedback container" role="status"><span>{{cart.message()}}</span><a routerLink="/panier">Voir le panier</a><button (click)="cart.message.set('')" aria-label="Fermer la notification" title="Fermer"><i class="fas fa-times" aria-hidden="true"></i></button></div>
+<main id="main-content"><router-outlet></router-outlet></main>
+<footer class="shop-footer"><div class="container">
+  <div class="footer-grid"><div><a routerLink="/" class="footer-brand">SmartShop<span>Hawala Smart Boutique</span></a><p>Smartphones, accessoires et selection du moment.</p><span class="demo-label">Donnees fictives · Aucun paiement reel</span></div>
+    <nav aria-label="Catalogue"><h2>La boutique</h2><a routerLink="/smartphones">Smartphones</a><a routerLink="/accessoires">Accessoires</a><a routerLink="/promotions">Promotions</a><a routerLink="/panier">Mon panier</a></nav>
+    <nav aria-label="Service client"><h2>Besoin d'aide ?</h2><a routerLink="/contact">Contact</a><a routerLink="/faq">Questions frequentes</a><a routerLink="/livraison">Livraison</a><a routerLink="/retours">Retours</a></nav>
+    <div><h2>Le projet</h2><p>Une realisation de Yassine Ben Hawala.</p><a href="https://github.com/hawalayessin/SmartphoneShop" target="_blank" rel="noreferrer"><i class="fab fa-github me-2" aria-hidden="true"></i>Code source <i class="fas fa-arrow-up" aria-hidden="true"></i></a><a href="https://portfoliohawala.vercel.app/project" target="_blank" rel="noreferrer">Portfolio <i class="fas fa-arrow-up" aria-hidden="true"></i></a></div>
+  </div>
+  <div class="footer-bottom"><span>© {{year}} SmartShop</span><nav aria-label="Informations"><a routerLink="/mentions-legales">Mentions legales</a><a routerLink="/conditions">Conditions</a><a routerLink="/confidentialite">Confidentialite</a></nav></div>
+</div></footer>

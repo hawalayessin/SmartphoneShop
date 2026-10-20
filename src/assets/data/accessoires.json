@@ -1,0 +1,5 @@
+[
+  { "_id": "accessoire-cable", "nomTel": "Cable USB-C", "marque": "SmartShop", "caracteristiques": "Accessoire fictif pour la demonstration du catalogue.", "prix": 12.90, "stock": 20, "imageUrl": "", "icon": "fa-plug" },
+  { "_id": "accessoire-coque", "nomTel": "Coque de protection", "marque": "SmartShop", "caracteristiques": "Modele de demonstration. Compatibilite a verifier avant un achat reel.", "prix": 19.90, "stock": 15, "imageUrl": "", "icon": "fa-mobile-alt" },
+  { "_id": "accessoire-casque", "nomTel": "Casque audio", "marque": "SmartShop", "caracteristiques": "Produit fictif ; aucun achat ou envoi depuis ce site.", "prix": 39.90, "stock": 8, "imageUrl": "", "icon": "fa-headphones" }
+]
